@@ -1,0 +1,12 @@
+steps:
+# Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/sascha-playground-doit/ticket-similarity-api', '.']
+# Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/sascha-playground-doit/ticket-similarity-api']
+# Deploy container image to Cloud Run
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['run', 'deploy', 'ticket-similarity-api', '--image', 'gcr.io/sascha-playground-doit/ticket-similarity-api', '--region', 'us-central1', '--platform', 'managed', '--vpc-connector', 'recommendation-engine', '--update-env-vars', 'ENDPOINT=projects/234439745674/locations/us-central1/endpoints/3487883979770560512', '--update-env-vars', 'PROJECT=sascha-playground-doit', '--update-env-vars', 'REGION=us-central1', '--update-env-vars', 'INDEX_RESOURCE_NAME=projects/234439745674/locations/us-central1/indexEndpoints/4299714987208736768', '--update-env-vars', 'DEPLOYED_INDEX_ID=ticket_similarity_deployed_v2']
+images:
+- gcr.io/sascha-playground-doit/ticket-similarity-api
